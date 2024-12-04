@@ -4,13 +4,11 @@ import com.devsuperior.dsmeta.dto.SaleMinDTO;
 import com.devsuperior.dsmeta.dto.SaleSellerDTO;
 import com.devsuperior.dsmeta.dto.SellerAmountDTO;
 import com.devsuperior.dsmeta.entities.Sale;
-import com.devsuperior.dsmeta.entities.Seller;
 import com.devsuperior.dsmeta.repositories.SaleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -30,35 +28,27 @@ public class SaleService {
 	}
 
 	public Page<SaleSellerDTO> getReport(String minDate, String maxDate, String name, Pageable pageable) {
-		//Calculo para data MAXIMA
-		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
-		LocalDate maxDigitada = LocalDate.parse(maxDate);
-		LocalDate max = maxDate.equals("") ? today : maxDigitada;
 
-		//Calculo para data MINIMA
-		LocalDate min1AnoAtras = today.minusYears(1L);
-		LocalDate minDigitada = LocalDate.parse(minDate);
-		LocalDate min = minDate.equals("") ? min1AnoAtras : minDigitada;
+		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
+
+		LocalDate max = maxDate.equals("") ? today : LocalDate.parse(maxDate);
+		LocalDate min = minDate.equals("") ? today.minusYears(1L) : LocalDate.parse(minDate);
 
 		Page<SaleSellerDTO> result = repository.getReport(min, max, name, pageable);
 
 		return result;
 	}
 
-	public List<SellerAmountDTO> getSummary(String dateInic, String dateFinal) {
-		//Calculo para data FINAL
+	public List<SellerAmountDTO> getSummary(String minDate, String maxDate) {
+
 		LocalDate today = LocalDate.ofInstant(Instant.now(), ZoneId.systemDefault());
-		LocalDate finalDigitada = LocalDate.parse(dateFinal);
-		LocalDate fin = dateFinal.equals("") ? today : finalDigitada;
 
-		//Calculo para data INICIAL
-		LocalDate min1AnoAtras = today.minusYears(1L);
-		LocalDate inicDigitada = LocalDate.parse(dateInic);
-		LocalDate inic = dateInic.equals("") ? min1AnoAtras : inicDigitada;
+		LocalDate max = maxDate.equals("") ? today : LocalDate.parse(maxDate);
+		LocalDate min = minDate.equals("") ? today.minusYears(1L) : LocalDate.parse(minDate);
 
-		List<SellerAmountDTO> result2 = repository.getSummary(inic, fin);
+		List<SellerAmountDTO> result = repository.getSummary(min, max);
 
-		return result2;
+		return result;
 	}
 
 

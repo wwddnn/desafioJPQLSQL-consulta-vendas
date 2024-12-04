@@ -1,19 +1,15 @@
 package com.devsuperior.dsmeta.dto;
 
-import com.devsuperior.dsmeta.entities.Seller;
-
-import java.util.List;
-
 public class SellerAmountDTO {
 
     private String name;
-    private Long sum;
+    private Double sum;
 
    public SellerAmountDTO(){
 
    }
 
-    public SellerAmountDTO(String name, Long sum) {
+    public SellerAmountDTO(String name, Double sum) {
         this.name = name;
         this.sum = sum;
     }
@@ -22,7 +18,7 @@ public class SellerAmountDTO {
         return name;
     }
 
-    public Long getSum() {
+    public Double getSum() {
         return sum;
     }
 }
